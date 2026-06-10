@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Art World</title>
+
+<style>
+.top-nav{
+    position:sticky;
+    top:0;
+
+    z-index:999;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:20px 6%;
+
+    background:rgba(5,5,5,.85);
+
+    backdrop-filter:blur(20px);
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.nav-btn{
+    text-decoration:none;
+    color:white;
+
+    padding:12px 20px;
+
+    border-radius:14px;
+
+    background:rgba(255,255,255,.08);
+
+    border:1px solid rgba(255,255,255,.15);
+
+    backdrop-filter:blur(20px);
+
+    transition:.25s;
+}
+
+.nav-btn:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 0 20px rgba(255,255,255,.08);
+}
+
+.asset-counter{
+    color:#aaa;
+    font-weight:700;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background:#050505;
+color:white;
+font-family:Arial,sans-serif;
+overflow:hidden;
+}
+
+.header{
+text-align:center;
+padding:40px 20px;
+}
+
+.header h1{
+font-size:5rem;
+margin-bottom:10px;
+}
+
+.header p{
+color:#999;
+}
+
+.gallery{
+display:flex;
+flex-direction:column;
+gap:18px;
+padding:20px 0;
+}
+
+.marquee{
+overflow:hidden;
+width:100%;
+}
+
+.track{
+display:flex;
+gap:14px;
+width:max-content;
+animation:marquee 35s linear infinite;
+}
+
+.reverse .track{
+animation-direction:reverse;
+}
+
+.marquee:hover .track{
+animation-play-state:paused;
+}
+
+.card{
+position:relative;
+
+width:170px;
+height:280px;
+
+border-radius:22px;
+overflow:hidden;
+
+flex-shrink:0;
+
+transition:
+transform .25s ease,
+box-shadow .25s ease;
+
+display:block;
+}
+
+.card:hover{
+transform:scale(1.08);
+z-index:20;
+
+box-shadow:
+0 20px 50px rgba(0,0,0,.5);
+}
+
+.card img{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+}
+
+.badge{
+position:absolute;
+
+bottom:12px;
+left:50%;
+
+transform:translateX(-50%);
+
+padding:10px 18px;
+
+border-radius:999px;
+
+background:rgba(255,255,255,.12);
+
+backdrop-filter:blur(20px);
+
+border:1px solid rgba(255,255,255,.25);
+
+color:white;
+font-size:12px;
+font-weight:700;
+
+opacity:0;
+
+transition:.25s;
+}
+
+.card:hover .badge{
+opacity:1;
+}
+
+@keyframes marquee{
+from{
+transform:translateX(0);
+}
+to{
+transform:translateX(-50%);
+}
+}
+
+@media(max-width:768px){
+
+.header h1{
+font-size:3rem;
+}
+
+.card{
+width:120px;
+height:200px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+<nav class="top-nav">
+
+    <a href="working.html" class="nav-btn">
+        🏠 Home
+    </a>
+
+    <div class="asset-counter">
+        28 Assets
+    </div>
+
+</nav>
+
+<div class="header">
+<h1>ART WORLD</h1>
+<p>Hover to pause • Click artwork to open HD version</p>
+</div>
+
+<div class="gallery" id="gallery"></div>
+
+<script>
+
+const gallery=document.getElementById("gallery");
+
+const assets=[];
+
+for(let i=1;i<=28;i++){
+
+assets.push({
+preview:`previews/asset${i}.webp`,
+hd:`downloads/asset${i}.png`
+});
+
+}
+
+for(let row=0;row<3;row++){
+
+const marquee=document.createElement("div");
+
+marquee.className=
+row===1
+? "marquee reverse"
+: "marquee";
+
+const track=document.createElement("div");
+
+track.className="track";
+
+const duplicated=[...assets,...assets];
+
+duplicated.forEach(asset=>{
+
+track.innerHTML+=`
+
+<a href="${asset.hd}"
+target="_blank"
+class="card">
+
+<img src="${asset.preview}"
+loading="lazy">
+
+<div class="badge">
+✦ OPEN HD
+</div>
+
+</a>
+
+`;
+
+});
+
+marquee.appendChild(track);
+
+gallery.appendChild(marquee);
+
+}
+
+</script>
+
+</body>
+</html>
